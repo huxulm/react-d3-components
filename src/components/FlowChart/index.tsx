@@ -22,12 +22,12 @@ export interface FlowChartProps {
 
 const FlowChart: FC<Partial<FlowChartProps>> = (props) => {
   const { nodes = [], edges = [], height = 500, width = 500, dir = "RIGHT" } = props;
-  const [_nodes, _] = useState<NodeData[]>(nodes)
+  const [_nodes ] = useState<NodeData[]>(nodes)
   const [selections, setSelections] = useState<string[]>(['1', '1-2']);
   const [_edges, setEdges] = useState<EdgeData[]>(edges)
   const color = scaleOrdinal(schemeCategory10).domain((nodes).map(v => v.id))
   const getColor = (id?: string) => {
-    let seed = Math.ceil(Math.random() * schemeCategory10.length);
+    const seed = Math.ceil(Math.random() * schemeCategory10.length);
     if (id) {
       return color(id)
     }

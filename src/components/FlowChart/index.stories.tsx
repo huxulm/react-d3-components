@@ -30,7 +30,7 @@ const defaultIcon1 = {
   width: 40,
 };
 function generateNodes(n: number) {
-  let nodes: NodeData[] = [];
+  const nodes: NodeData[] = [];
   for (let i = 0; i < n; i++) {
     nodes.push({
       id: `n-${i + 1}`,
