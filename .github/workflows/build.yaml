@@ -13,8 +13,11 @@ permissions:
   pages: write
   id-token: write
 
+
 jobs:
   build:
+    environment:
+      name: github-pages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,4 +43,4 @@ jobs:
           install_command: yarn install
           build_command: yarn build-storybook
           path: dist/storybook
-          checkout: false
+          checkout: true
