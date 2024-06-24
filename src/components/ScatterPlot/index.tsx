@@ -1,4 +1,4 @@
-import { extent, scaleLinear } from "d3";
+import { scaleLinear } from "d3";
 import { FC } from "react";
 import { motion } from "framer-motion";
 import {
