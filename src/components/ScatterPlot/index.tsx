@@ -57,8 +57,8 @@ const ScatterPlot: FC<ScatterPlotProps> = (props) => {
   }
   const chartHeight = height - marginTop - marginBottom;
   const chartWidth = width - marginLeft - marginRight;
-  const xDomains = extent(data, (d) => d.x) as [number, number];
-  const yDomains = extent(data, (d) => d.y) as [number, number];
+  const xDomains = [0, 1000]; // extent(data, (d) => d.x) as [number, number];
+  const yDomains = [0, 1000]; // extent(data, (d) => d.y) as [number, number];
   const xScale = scaleLinear<any>()
     .domain(xDomains)
     .nice()
@@ -70,7 +70,7 @@ const ScatterPlot: FC<ScatterPlotProps> = (props) => {
   const XAxis = (
     <LinearXAxis
       type="value"
-      position="center"
+      position="end"
       height={chartHeight}
       tickSeries={
         <LinearXAxisTickSeries
@@ -83,7 +83,7 @@ const ScatterPlot: FC<ScatterPlotProps> = (props) => {
   const YAxis = (
     <LinearYAxis
       type="value"
-      position="center"
+      position="start"
       width={chartWidth}
       tickSeries={
         <LinearYAxisTickSeries
@@ -138,7 +138,7 @@ const ScatterPlot: FC<ScatterPlotProps> = (props) => {
           <motion.circle
             transition={{ type: "spring" }}
             id={"c_" + id}
-            initial={{ r: animate? 0 : d.r }}
+            initial={{ r: animate ? 0 : d.r }}
             animate={{ r: d.r }}
             exit={{ r: 0 }}
             cx={cx}

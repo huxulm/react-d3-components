@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { lazy, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 const ScatterPlot = lazy(() => import("."));
 const meta = {
   title: "Components/ScatterPlot",
@@ -38,16 +38,25 @@ const ScatterPlotWithController = (props: any) => {
   const { data: _data, ...others } = props;
   const [data, setData] = useState<any[]>(_data);
   const [cnt, setCnt] = useState(0)
+  const [live, setLive] = useState(true)
   const refreshData = () => {
     setCnt(cnt + 1)
     setData(generateData(Math.ceil(Math.random() * 100)));
   };
   const clear = () => setData([]);
+  useEffect(() => {
+    let i: any;
+    if (live) {
+      i = setInterval(() => refreshData(), 1000)
+    }
+    return () => i && clearInterval(i)
+  }, [live])
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <div>
+      <div style={{gap: '10px', display: 'flex' }}>
         <button onClick={refreshData}>Refresh Data</button>
         <button onClick={clear}>Clear</button>
+        <button onClick={() => setLive(!live)}>toggle Live</button>
         <p>count: {data.length}</p>
       </div>
       <ScatterPlot key={cnt} {...others} data={data} />
