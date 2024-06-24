@@ -15,6 +15,7 @@
     "@types/d3": "^7.4.3",
     "d3": "^7.9.0",
     "framer-motion": "^11.2.11",
+    "reablocks": "^8.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "reaflow": "^5.2.12",
