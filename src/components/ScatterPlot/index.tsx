@@ -60,13 +60,13 @@ const ScatterPlot: FC<ScatterPlotProps> = (props) => {
   const xDomains = extent(data, (d) => d.x) as [number, number];
   const yDomains = extent(data, (d) => d.y) as [number, number];
   const xScale = scaleLinear<any>()
-    .domain(xDomains).nice()
+    .domain(xDomains)
+    .nice()
     .range([marginLeft, chartWidth + marginLeft]);
   const yScale = scaleLinear<any>()
-    .domain(yDomains).nice()
+    .domain(yDomains)
+    .nice()
     .range([chartHeight + marginBottom, marginBottom]);
-  let initialFn = (d: any) => ({ r: animate ? 0 : 10 }),
-    animateFn = (d: any) => ({ r: 10 });
   const XAxis = (
     <LinearXAxis
       type="value"
@@ -131,13 +131,18 @@ const ScatterPlot: FC<ScatterPlotProps> = (props) => {
           domain: yDomains,
         })}
       />
-      {data.map((d) => {
+      {data.map((d, id) => {
+        const cx = xScale(d.x);
+        const cy = yScale(d.y);
         return (
           <motion.circle
-            initial={initialFn(d)}
-            animate={animateFn(d)}
-            cx={xScale(d.x)}
-            cy={yScale(d.y)}
+            transition={{ type: "spring" }}
+            id={"c_" + id}
+            initial={{ r: animate? 0 : d.r }}
+            animate={{ r: d.r }}
+            exit={{ r: 0 }}
+            cx={cx}
+            cy={cy}
             style={pointStyle}
           />
         );
