@@ -36,14 +36,12 @@ function generateData(n: number) {
 
 const ScatterPlotWithController = (props: any) => {
   const { data: _data, ...others } = props;
-  const [data, setData] = useState<any[]>(_data);
-  const [cnt, setCnt] = useState(0)
+  const [data, setData] = useState<{cnt: number; data: any[]}>({cnt: 0, data: _data});
   const [live, setLive] = useState(true)
   const refreshData = () => {
-    setCnt(cnt + 1)
-    setData(generateData(Math.ceil(Math.random() * 100)));
+    setData(prev => ({cnt: prev.cnt + 1, data: generateData(Math.ceil(Math.random() * 100))}));
   };
-  const clear = () => setData([]);
+  const clear = () => setData({cnt: 0, data: []});
   useEffect(() => {
     let i: any;
     if (live) {
@@ -57,9 +55,9 @@ const ScatterPlotWithController = (props: any) => {
         <button onClick={refreshData}>Refresh Data</button>
         <button onClick={clear}>Clear</button>
         <button onClick={() => setLive(!live)}>toggle Live</button>
-        <p>count: {data.length}</p>
+        <p>count: {data.data.length}</p>
       </div>
-      <ScatterPlot key={cnt} {...others} data={data} />
+      <ScatterPlot key={data.cnt} {...others} data={data.data} />
     </div>
   );
 };
