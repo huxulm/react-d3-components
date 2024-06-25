@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { lazy } from "react";
+import { ChangeEvent, FC, lazy, useState } from "react";
 // import { fn } from "@storybook/test";
-import { NodeData } from "reaflow";
+import { EdgeData, NodeData } from "reaflow";
 // import { FlowChart } from ".";
-const FlowChart = lazy(() => import("."))
+const FlowChart = lazy(() => import("."));
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -25,10 +25,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const defaultIcon1 = {
-  url: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNSAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzExM18xNDQ3KSI+CjxwYXRoIGQ9Ik0xMi41IDYuMjVDMTcuNjEgNi4yNSAyMS43NSAxMC4zOSAyMS43NSAxNS41VjE4LjI1SDMuMjVWMTUuNUMzLjI1IDEwLjM5IDcuMzkgNi4yNSAxMi41IDYuMjVaIiBzdHJva2U9IiMxMjEzMzEiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPGNpcmNsZSBjeD0iMTIuNSIgY3k9IjE0Ljc1IiByPSIxLjI1IiBmaWxsPSIjMTIxMzMxIi8+CjxwYXRoIGQ9Ik0xMi41IDguMzFWNi4yNSIgc3Ryb2tlPSIjMTIxMzMxIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik01LjQ5OTc5IDEyLjg3OTlMMy43Nzk3OSAxMi40MTk5IiBzdHJva2U9IiMxMjEzMzEiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHBhdGggZD0iTTIxLjIyIDEyLjQxOTlMMTkuNSAxMi44Nzk5IiBzdHJva2U9IiMxMjEzMzEiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHBhdGggZD0iTTkuMjUgMTMuNzVMMTIuNDk5OSAxNC43NTAxIiBzdHJva2U9IiMxMjEzMzEiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF8xMTNfMTQ0NyI+CjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0id2hpdGUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuNSkiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K',
+  url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNSAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzExM18xNDQ3KSI+CjxwYXRoIGQ9Ik0xMi41IDYuMjVDMTcuNjEgNi4yNSAyMS43NSAxMC4zOSAyMS43NSAxNS41VjE4LjI1SDMuMjVWMTUuNUMzLjI1IDEwLjM5IDcuMzkgNi4yNSAxMi41IDYuMjVaIiBzdHJva2U9IiMxMjEzMzEiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPGNpcmNsZSBjeD0iMTIuNSIgY3k9IjE0Ljc1IiByPSIxLjI1IiBmaWxsPSIjMTIxMzMxIi8+CjxwYXRoIGQ9Ik0xMi41IDguMzFWNi4yNSIgc3Ryb2tlPSIjMTIxMzMxIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik01LjQ5OTc5IDEyLjg3OTlMMy43Nzk3OSAxMi40MTk5IiBzdHJva2U9IiMxMjEzMzEiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHBhdGggZD0iTTIxLjIyIDEyLjQxOTlMMTkuNSAxMi44Nzk5IiBzdHJva2U9IiMxMjEzMzEiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHBhdGggZD0iTTkuMjUgMTMuNzVMMTIuNDk5OSAxNC43NTAxIiBzdHJva2U9IiMxMjEzMzEiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF8xMTNfMTQ0NyI+CjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0id2hpdGUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuNSkiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K",
   height: 40,
   width: 40,
 };
+
 function generateNodes(n: number) {
   const nodes: NodeData[] = [];
   for (let i = 0; i < n; i++) {
@@ -42,30 +43,23 @@ function generateNodes(n: number) {
   }
   return nodes;
 }
-// function generateEdges(n: number, m: number) {
-//   let s = new Set<string>();
-//   let edges: EdgeData[] = [];
-//   for (let i = 0; i < m; i++) {
-//     let from = 0;
-//     let to = 0;
-//     let edge = `${from - to}`;
-//     let cnt = 0;
-//     while (from <= to || s.has(edge)) {
-//       from = Math.floor(Math.random() * n);
-//       to = Math.floor(Math.random() * n);
-//       edge = `${from - to}`;
-//       cnt++;
-//       if (cnt > m) {
-//         break;
-//       }
-//     }
-//     if (cnt <= m) {
-//       s.add(edge);
-//       edges.push({ id: `e-${i + 1}`, from: `${from + 1}`, to: `${to + 1}` });
-//     }
-//   }
-//   return edges;
-// }
+function generateEdges(n: number, m: number) {
+  const s = new Set<string>();
+  const edges: EdgeData[] = [];
+  for (let i = 0; i < m; i++) {
+    let from = 0;
+    let to = 0;
+    let edge = `n-${from}-n-${to}`;
+    while (s.size < m && (from >= to || s.has(edge))) {
+      from = Math.floor(Math.random() * n) + 1;
+      to = Math.floor(Math.random() * n) + 1;
+      edge = `n-${from}-n-${to}`;
+    }
+    s.add(edge);
+    edges.push({ id: edge, from: `n-${from}`, to: `n-${to}` });
+  }
+  return edges;
+}
 const DEFAULT_15_EDGES = [
   {
     id: "n-3-n-4",
@@ -189,5 +183,76 @@ export const Default: Story = {
     dir: "RIGHT",
     nodes: generateNodes(15),
     edges: DEFAULT_15_EDGES,
+  },
+};
+
+const FlowChartWithControl: FC<any> = (props) => {
+  const [live, setLive] = useState(true);
+  const [links, setLinks] = useState<EdgeData<any>[]>(DEFAULT_15_EDGES);
+  const [cnt, setCnt] = useState(0);
+  const [nodes, setNodes] = useState<NodeData<any>[]>(generateNodes(15));
+  const refreshAll = () => {
+    setCnt(cnt + 1);
+    const n = Math.max(15, Math.ceil(Math.random() * 20));
+    setLive(true);
+    setNodes(generateNodes(n));
+    setLinks(
+      generateEdges(n, Math.max(n / 2, Math.ceil(Math.random() * n * 2)))
+    );
+  };
+  const [dir, setDir] = useState<string>("RIGHT");
+  const changeDir = (e: ChangeEvent<HTMLSelectElement>) => {
+    setCnt(cnt + 1);
+    console.log(e.target.value);
+    setDir(e.target.value);
+  };
+  return (
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          padding: 5,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          zIndex: 1000,
+        }}
+      >
+        <p style={{display: "flex", gap: 10}}>
+          <button onClick={() => setLive(!live)}>
+            {live ? "Stop" : "Start"}
+          </button>
+          <button onClick={refreshAll}>{"Random graph"}</button>
+          <select onChange={changeDir}>
+            <option label="--Change Orientation--" />
+            <option label="UP" value={"UP"} />
+            <option label="DOWN" value={"DOWN"} />
+            <option label="LEFT" value={"LEFT"} />
+            <option label="RIGHT" value={"RIGHT"} />
+          </select>
+        </p>
+        <p>1, 点击路径可选中 2, 可动态绘制连接（从起始节点拖拽到目标）</p>
+      </div>
+      <FlowChart
+        key={cnt}
+        {...props}
+        animate={live}
+        nodes={nodes}
+        edges={links}
+        dir={dir}
+      />
+    </div>
+  );
+};
+export const WithController: Story = {
+  args: {
+    width: 500,
+    dir: "RIGHT",
+    nodes: generateNodes(15),
+    edges: DEFAULT_15_EDGES,
+  },
+  render: (args) => {
+    return <FlowChartWithControl {...args} />;
   },
 };

@@ -18,26 +18,46 @@ export interface FlowChartProps {
   nodes: NodeData[];
   edges: EdgeData[];
   dir: CanvasDirection;
+  animate?: boolean;
 }
 
 const FlowChart: FC<Partial<FlowChartProps>> = (props) => {
-  const { nodes = [], edges = [], height = 500, width = 500, dir = "RIGHT" } = props;
-  const [_nodes ] = useState<NodeData[]>(nodes)
-  const [selections, setSelections] = useState<string[]>(['1', '1-2']);
-  const [_edges, setEdges] = useState<EdgeData[]>(edges)
-  const color = scaleOrdinal(schemeCategory10).domain((nodes).map(v => v.id))
+  const {
+    nodes = [],
+    edges = [],
+    height = 500,
+    width = 500,
+    dir = "RIGHT",
+    animate = true,
+  } = props;
+  const [_nodes] = useState<NodeData[]>(nodes);
+  const [selections, setSelections] = useState<string[]>(["1", "1-2"]);
+  const [_edges, setEdges] = useState<EdgeData[]>(edges);
+  const color = scaleOrdinal(schemeCategory10).domain(nodes.map((v) => v.id));
   const getColor = (id?: string) => {
     const seed = Math.ceil(Math.random() * schemeCategory10.length);
     if (id) {
-      return color(id)
+      return color(id);
     }
-    return color(seed + "")
-  }
+    return color(seed + "");
+  };
 
   const arrowColor = getColor();
 
   return (
-    <div style={{ position: "absolute", minWidth: width, minHeight: height, top: 0, bottom: 0, left: 0, right: 0, width: "100%", height: "100%" }}>
+    <div
+      style={{
+        position: "absolute",
+        minWidth: width,
+        minHeight: height,
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: "100%",
+        height: "100%",
+      }}
+    >
       <style>
         {`
         .edge {
@@ -56,9 +76,6 @@ const FlowChart: FC<Partial<FlowChartProps>> = (props) => {
         }
         `}
       </style>
-      <pre style={{position: 'absolute', left: 0, top: 0}}>
-        {JSON.stringify(_edges, null, 2)}
-      </pre>
       <Canvas
         direction={dir}
         nodes={_nodes}
@@ -68,29 +85,35 @@ const FlowChart: FC<Partial<FlowChartProps>> = (props) => {
             // {...props}
             style={{ fill: getColor(props.id), "stroke-width": 0 }}
             icon={<Icon />}
-          >
-          </Node>
+          ></Node>
         )}
         edges={_edges}
-        arrow={<MarkerArrow size={4} style={{ stroke: arrowColor, fill: arrowColor }} />}
+        arrow={
+          <MarkerArrow
+            size={4}
+            style={{ stroke: arrowColor, fill: arrowColor }}
+          />
+        }
         edge={(props) => {
           return (
             <Edge
-            onClick={(event, edge) => {
-              console.log('Selecting Edge', event, edge);
-              setSelections([edge.id]);
-            }}
-            onRemove={(event, edge) => {
-              console.log('Removing Edge', event, edge);
-              setEdges(_edges.filter(e => e.id !== edge.id));
-              setSelections([]);
-            }}
-              className="edge start"
-              style={{ 'stroke-width': 2, stroke: getColor(props.properties?.from) }}
+              onClick={(event, edge) => {
+                console.log("Selecting Edge", event, edge);
+                setSelections([edge.id]);
+              }}
+              onRemove={(event, edge) => {
+                console.log("Removing Edge", event, edge);
+                setEdges(_edges.filter((e) => e.id !== edge.id));
+                setSelections([]);
+              }}
+              className={`edge ${animate ? "start" : "stop"}`}
+              style={{
+                "stroke-width": 2,
+                stroke: getColor(props.properties?.from),
+              }}
             />
           );
         }}
-
         onNodeLinkCheck={(_event, from: NodeData, to: NodeData) => {
           if (from.id === to.id) {
             return false;
@@ -100,18 +123,20 @@ const FlowChart: FC<Partial<FlowChartProps>> = (props) => {
           }
           return true;
         }}
-
         onNodeLink={(_event, from: NodeData, to: NodeData) => {
           const id = `${from.id}-${to.id}`;
-          setEdges([..._edges, {
-            id,
-            from: from.id,
-            to: to.id,
-            parent: to.parent
-          }]);
+          setEdges([
+            ..._edges,
+            {
+              id,
+              from: from.id,
+              to: to.id,
+              parent: to.parent,
+            },
+          ]);
         }}
       ></Canvas>
     </div>
   );
 };
-export default FlowChart
+export default FlowChart;
