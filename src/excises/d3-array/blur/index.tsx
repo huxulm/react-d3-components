@@ -3,6 +3,7 @@ import { FC, useCallback } from "react";
 import { extent } from "d3-array";
 import { scaleLinear } from "d3-scale";
 import { line, curveBasis } from "d3-shape";
+import { motion } from "framer-motion";
 
 interface BlurProps {
   height?: number;
@@ -33,18 +34,19 @@ const Blur: FC<BlurProps> = (props) => {
   );
   return (
     <svg width={width} height={height}>
-      <path
+      <motion.path
         d={getPath(data) as string}
         stroke="red"
+        strokeWidth={5}
         fill="none"
         className="p1"
-      ></path>
-      <path
+      />
+      <motion.path
         d={getPath(blurred) as string}
         stroke="orange"
         fill="none"
         className="p2"
-      ></path>
+      />
     </svg>
   );
 };
