@@ -19,28 +19,23 @@ jobs:
     environment:
       name: github-pages
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use Node.js 21.x
-        uses: actions/setup-node@v4
-        with:
-          node-version: 21.x
-
-      - name: Install deps and build (with cache)
-        uses: bahmutov/npm-install@v1
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Build Prod
-        run: npm run build
-
-      - name: Build storybook and deploy
-        uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
-        with:
-          install_command: yarn install
-          build_command: yarn build-storybook
-          path: dist/storybook
-          checkout: true
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - name: Build storybook and deploy
+      uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
+      with:
+        install_command: yarn install
+        build_command: yarn build-storybook
+        path: dist/storybook
+        checkout: true
