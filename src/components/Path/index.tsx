@@ -1,4 +1,6 @@
-import { extent, path, scaleLinear } from "d3";
+import { scaleLinear } from "d3-scale";
+import { path } from "d3-path";
+import { extent } from "d3-array";
 import { FC } from "react";
 import { Target, Transition, motion } from "framer-motion";
 interface PathProps {

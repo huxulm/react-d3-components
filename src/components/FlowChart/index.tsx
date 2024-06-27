@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
-import { scaleOrdinal, schemeCategory10 } from "d3";
+import { scaleOrdinal } from "d3-scale";
+import { schemeCategory10 } from "d3-scale-chromatic";
 import {
   Canvas,
   EdgeData,

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { lazy } from "react";
+import { blurredWalk, randomWalk } from "./data";
 // import { fn } from "@storybook/test";
 const Path = lazy(() => import("."));
 
@@ -23,6 +24,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {
-    }
-}
+  args: {
+    data: randomWalk,
+    blurred: blurredWalk,
+  },
+};
