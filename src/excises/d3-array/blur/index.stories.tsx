@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { lazy } from "react";
 import { blurredWalk, randomWalk } from "./data";
-import { Responsive } from "../../../common/utils/responsive/Responsive";
+import { Responsive } from "@common/utils/responsive/Responsive";
 // import { fn } from "@storybook/test";
 const Path = lazy(() => import("."));
 
