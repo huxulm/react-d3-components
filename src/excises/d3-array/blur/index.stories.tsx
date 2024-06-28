@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { lazy } from "react";
 import { blurredWalk, randomWalk } from "./data";
-import { Responsive } from "@common/utils/responsive/Responsive";
-// import { fn } from "@storybook/test";
+import { Responsive } from "@common/utils/responsive";
 const Path = lazy(() => import("."));
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
