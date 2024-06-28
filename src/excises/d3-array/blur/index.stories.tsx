@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { lazy } from "react";
 import { blurredWalk, randomWalk } from "./data";
-// import { Responsive } from "@common/utils/responsive/Responsive";
+import { Responsive } from "@/common/utils/Responsive/Responsive";
 const Path = lazy(() => import("."));
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -38,7 +38,9 @@ export const AutoSize: Story = {
   },
   render: (args) => {
     return <div style={{width: "80vw", height: "80vh"}}>
-      <Path {...args} />
+      <Responsive>
+        {({width, height}) => <Path {...args} width={width} height={height} />}
+      </Responsive>
     </div>
   }
 };

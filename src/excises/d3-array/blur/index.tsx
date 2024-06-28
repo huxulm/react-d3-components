@@ -37,7 +37,6 @@ const Blur: FC<BlurProps> = (props) => {
       <motion.path
         d={getPath(data) as string}
         stroke="red"
-        strokeWidth={5}
         fill="none"
         className="p1"
       />
