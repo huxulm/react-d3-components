@@ -5,7 +5,7 @@ import { scaleLinear } from "d3-scale";
 import { line, curveBasis } from "d3-shape";
 import { motion } from "framer-motion";
 
-interface BlurProps {
+export interface BlurProps {
   height?: number;
   width?: number;
   data?: Float64Array;

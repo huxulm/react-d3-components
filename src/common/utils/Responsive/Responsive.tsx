@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useParentSize, Size } from "./useParentSize";
 
-type ResponsiveProps = {
+export type ResponsiveProps = {
   height?: string | number;
   width?: string | number;
   children: (props: Size) => any
