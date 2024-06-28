@@ -42,7 +42,7 @@ const Blur: FC<BlurProps> = (props) => {
       />
       <motion.path
         d={getPath(blurred) as string}
-        stroke="orange"
+        stroke="blue"
         fill="none"
         className="p2"
       />

@@ -37,7 +37,7 @@ export const AutoSize: Story = {
     blurred: blurredWalk,
   },
   render: (args) => {
-    return <div style={{width: "80vw", height: "80vh"}}>
+    return <div style={{width: "70vw", height: "70vh"}}>
       <Responsive>
         {({width, height}) => <Path {...args} width={width} height={height} />}
       </Responsive>
