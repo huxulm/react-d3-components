@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { lazy } from "react";
-// import { fn } from "@storybook/test";
+import { Responsive } from "../../common/utils/Responsive/Responsive";
 const Path = lazy(() => import("."));
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -23,9 +23,36 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {
-        pathStyle: {stroke: 'blue', fill: 'none'},
-        close: false,
-        points: [{x: 0, y: 0}, {x: 50, y: 50}, {x: 100, y: 0}]
-    }
-}
+  args: {
+    pathStyle: { stroke: "blue", fill: "none" },
+    close: false,
+    width: 500,
+    height: 500,
+    points: [
+      { x: 0, y: 0 },
+      { x: 50, y: 50 },
+      { x: 100, y: 0 },
+    ],
+  },
+};
+
+export const AutoSize: Story = {
+  args: {
+    pathStyle: { stroke: "blue", fill: "none" },
+    close: false,
+    width: 0,
+    height: 0,
+    points: [
+      { x: 0, y: 0 },
+      { x: 50, y: 50 },
+      { x: 100, y: 0 },
+    ],
+  },
+  render: (args) => {
+    return (
+      <div style={{ width: "50vw", height: "50vh" }}>
+        <Responsive>{({width, height}) => <Path {...args} width={width as number} height={height as number} />}</Responsive>
+      </div>
+    );
+  },
+};

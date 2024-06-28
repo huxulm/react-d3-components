@@ -4,16 +4,16 @@ import { extent } from "d3-array";
 import { FC } from "react";
 import { Target, Transition, motion } from "framer-motion";
 interface PathProps {
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
   points?: any[];
   close?: boolean;
   pathStyle?: any;
 }
 
 const Path: FC<PathProps> = ({
-  width = 500,
-  height = 500,
+  width,
+  height,
   points = [
     { x: 0, y: 0 },
     { x: 7, y: 13 },
@@ -51,7 +51,7 @@ const Path: FC<PathProps> = ({
     scale: 0,
   } as Target;
   const animate = {
-    rotate: 45,
+    // rotate: 45,
     scale: 1,
   };
   const transition = {
@@ -60,14 +60,16 @@ const Path: FC<PathProps> = ({
   } as Transition;
   return (
     <svg width={width} height={height}>
-      <motion.g
+      <motion.path
         initial={initial}
         animate={animate}
         transition={transition}
-        style={{ transformOrigin: "center" }}
+        exit={{scaleY: 0}}
+        style={{ transformOrigin: "start" }}
+        {...pathStyle}
+        d={p.toString()}
       >
-        <path {...pathStyle} d={p.toString()} />
-      </motion.g>
+      </motion.path>
     </svg>
   );
 };
