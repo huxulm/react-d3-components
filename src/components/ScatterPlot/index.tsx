@@ -15,7 +15,7 @@ import {
   getYScale,
 } from "reaviz";
 import { CloneElement } from "reablocks";
-interface ScatterPlotProps {
+export interface ScatterPlotProps {
   width?: number;
   height?: number;
   margin?: number | [number, number] | [number, number, number, number];

@@ -3,7 +3,7 @@ import { path } from "d3-path";
 import { extent } from "d3-array";
 import { FC } from "react";
 import { Target, Transition, motion } from "framer-motion";
-interface PathProps {
+export interface PathProps {
   width: number;
   height: number;
   points?: any[];
