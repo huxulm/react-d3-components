@@ -8,11 +8,6 @@ export default defineConfig({
       external: "NonExistingPath",
     },
   },
-  server: {
-    fs: {
-      cachedChecks: false
-    }
-  },
   plugins: [react()],
   resolve: {
     alias: [{ find: "@", replacement: resolve(__dirname, "./src") }],
