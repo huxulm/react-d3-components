@@ -3,6 +3,8 @@ import { star, heart, hand, plane, lightning, note } from "./paths";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 import { schemeCategory10 } from "d3";
 import { interpolate } from "flubber";
+// import { interpolatePath as interpolate } from "d3-interpolate-path"
+// import { interpolate } from "d3-interpolate"
 
 const getIndex = (_: any, index: number) => index;
 const paths = [star, heart, hand, plane, lightning, note];
@@ -18,7 +20,7 @@ export const MotionPath = (props: any) => {
 
   useEffect(() => {
     const animation = animate(progress, pathIndex, {
-      duration: 0.5,
+      duration: 5,
       ease: "easeInOut",
       onComplete: () => {
         if (pathIndex === paths.length - 1) {
