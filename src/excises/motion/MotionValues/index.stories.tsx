@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { MotionValues } from ".";
-import { Responsive } from "@/common/utils/Responsive/Responsive";
+import { Responsive } from "@/common/utils/responsive/Responsive";
 
 const meta = {
   title: "Excises/motion/MotionValues",
