@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { lazy } from "react";
 const Responsive = lazy(() =>
-  import("./Responsive").then((r) => ({ default: r.Responsive }))
+  import("@/common/utils/responsive/Responsive").then((r) => ({ default: r.Responsive }))
 );
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export

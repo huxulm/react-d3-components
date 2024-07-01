@@ -4,17 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build -o dist/storybook"
+    "start": "storybook dev -p 6006",
+    "build": "storybook build -o dist/storybook"
   },
   "dependencies": {
     "@types/d3-interpolate-path": "^2.0.3",
     "d3": "^7.9.0",
-    "d3-interpolate-path": "^2.3.0",
     "flubber": "^0.4.2",
     "framer-motion": "^11.2.11",
     "reablocks": "^8.0.2",
@@ -39,6 +36,7 @@
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "d3-interpolate-path": "^2.3.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",

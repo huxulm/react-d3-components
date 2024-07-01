@@ -5,7 +5,7 @@ import { resolve } from "path";
 export default defineConfig({
   build: {
     rollupOptions: {
-      external: "NonExistingPath",
+      external: ["/node_modules/flubber"],
     },
   },
   plugins: [react()],

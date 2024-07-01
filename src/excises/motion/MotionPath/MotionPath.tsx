@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { star, heart, hand, plane, lightning, note } from "./paths";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 import { schemeCategory10 } from "d3";
+
 import { interpolate } from "flubber";
 // import { interpolatePath as interpolate } from "d3-interpolate-path"
 // import { interpolate } from "d3-interpolate"
@@ -15,12 +16,12 @@ export const MotionPath = (props: any) => {
   const progress = useMotionValue(pathIndex);
   const fill = useTransform(progress, paths.map(getIndex), colors);
   const d = useTransform(progress, paths.map(getIndex), paths, {
-    mixer: (a, b) => interpolate(a, b, { maxSegmentLength: 0.1 }),
+    mixer: (a, b) => interpolate(a, b, {maxSegmentLength: 0.1}),
   });
 
   useEffect(() => {
     const animation = animate(progress, pathIndex, {
-      duration: 5,
+      duration: 1,
       ease: "easeInOut",
       onComplete: () => {
         if (pathIndex === paths.length - 1) {
