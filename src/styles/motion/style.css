@@ -250,7 +250,7 @@ li {
 .box-keyframes {
     width: 200px;
     height: 200px;
-    background: var(--purple);
+    background: var(--white);
 }
 
 .gesture-container div {
