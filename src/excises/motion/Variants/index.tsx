@@ -1,10 +1,8 @@
 import { useRef } from "react";
 import { motion, useCycle } from "framer-motion";
-// import { useDimensions } from "./use-dimensions";
 import { MenuToggle } from "./MenuToggle";
 import { Navigation } from "./Navigation";
 import { useDimensions } from "./use-dimensions";
-// import { useParentSize } from "@/common/utils/Responsive/useParentSize";
 
 const sidebar = {
   open: (height = 1000) => ({
@@ -29,7 +27,6 @@ const sidebar = {
 export const Variants = () => {
   const [isOpen, toggleOpen] = useCycle(false, true);
   const containerRef = useRef(null);
-  //   const { height } = useDimensions(containerRef);
   const { height } = useDimensions(containerRef)
   return (
     <motion.nav

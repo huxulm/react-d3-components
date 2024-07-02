@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
 
-export const MotionValues = ({width, height}: any) => {
+export const ExampleMotionValues = ({width, height}: any) => {
   const x = useMotionValue(5);
   const xInput = [-100, 0, 100];
   const background = useTransform(x, xInput, [
@@ -18,9 +18,9 @@ export const MotionValues = ({width, height}: any) => {
   const crossPathB = useTransform(x, [-50, -100], [0, 1]);
 
   return (
-    <motion.div className="example-container" style={{ background, width, height }}>
+    <motion.div className="motion-values-container" style={{ background, width, height }}>
       <motion.div
-        className="box"
+        className="box-motion-values"
         style={{ x }}
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}

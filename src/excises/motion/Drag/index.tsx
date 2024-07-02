@@ -1,27 +1,13 @@
-import { motion, useDragControls } from "framer-motion";
-import { PointerEventHandler } from "react";
+import { motion } from "framer-motion";
+import { useRef } from "react";
 
-export const Drag = ({ width, height }: any) => {
-  const ctrls = useDragControls();
-  const startDrag: PointerEventHandler = (e) => {
-    ctrls.start(e);
-  };
+export const DragExample = () => {
+  const constraintsRef = useRef(null);
   return (
     <>
-      <div
-        style={{
-          width,
-          height,
-          background: "#e2e2e2",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        onPointerDown={startDrag}
-      >
-        <motion.div drag dragControls={ctrls} initial={{ x: 0, y: 0 }}>
-          {"Text can be drag to any where"}
-        </motion.div>
+      <div className="drag-container">
+        <motion.div className="drag-area" ref={constraintsRef} />
+        <motion.div drag dragConstraints={constraintsRef} dragElastic={1}/>
       </div>
     </>
   );
