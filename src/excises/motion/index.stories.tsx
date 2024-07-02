@@ -8,6 +8,7 @@ import { Refresh } from "./Refresh";
 import { MotionProps } from "framer-motion";
 import { DragExample } from "./Drag";
 import { ExampleMotionValues } from "./MotionValues";
+import { LineDrawExample } from "./LineDraw";
 
 const meta = {
   title: "Excises/motion",
@@ -105,3 +106,18 @@ export const MotionValues: StoryObj = {
     return <ExampleMotionValues />;
   },
 };
+
+export const LineDraw: StoryObj<{width: number, height: number}> = {
+  args: {
+    width: 200,
+    height: 200,
+  },
+  parameters: {
+    layout: "centered",
+  },
+  render: (args) => {
+    return <LineDrawExample {...args}/>;
+  },
+};
+
+

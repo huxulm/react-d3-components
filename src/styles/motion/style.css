@@ -12,7 +12,7 @@ body {
     --orange: #fd7702;
     --yellow: #ffbb00;
 
-    --background: var(--purple);
+    --background: var(--ash-black);
     --accent: var(--blue);
 
     margin: 0;
@@ -144,10 +144,11 @@ code {
     transform: rotate(-90deg);
 }
 
-circle {
-    stroke-dashoffset: 0;
-    stroke-width: 15%;
-    fill: none;
+circle, line, rect {
+    stroke: rgb(8, 123, 245);
+    stroke-width: 10px;
+    fill: transparent;
+    stroke-linecap: round;    
 }
 
 .bg {
