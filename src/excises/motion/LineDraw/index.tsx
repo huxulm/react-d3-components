@@ -1,14 +1,23 @@
-import { Variant, Variants, motion } from "framer-motion";
+import {
+  Variant,
+  Variants,
+  motion
+} from "framer-motion";
 const variants = {
   hidden: {
     pathLength: 0,
     opacity: 0,
+    fill: "none",
   },
   visible: (v) => {
     const delay = 1 + v * 0.5;
     return {
       pathLength: 1,
       opacity: 1,
+      fill: "none",
+      strokeWidth: 10,
+      stroke: "black",
+      strokeLinecap: "round",
       transition: {
         pathLength: { delay, type: "spring", duration: 1.5, bounce: 0 },
         opacity: { delay, duration: 0.01 },

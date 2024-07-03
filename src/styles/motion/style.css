@@ -144,13 +144,6 @@ code {
     transform: rotate(-90deg);
 }
 
-circle, line, rect {
-    stroke: rgb(8, 123, 245);
-    stroke-width: 10px;
-    fill: transparent;
-    stroke-linecap: round;    
-}
-
 .bg {
     stroke: var(--accent);
     opacity: 0.3;
