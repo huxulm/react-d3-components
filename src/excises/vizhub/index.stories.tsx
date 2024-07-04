@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { Responsive } from "@/common/utils/responsive/Responsive";
 import { useCircleWithD3 } from "./CirclesWithD3/useCircleWithD3";
 import { CirclesWithD3 } from "./CirclesWithD3";
+import { MultipleLines } from "./MultipleLines";
 
 export default {
   title: "Excises/vizhub",
@@ -26,6 +27,17 @@ export const ExampleCircleWithD3_1: StoryObj = {
     return (
       <div style={{ width: "100vw", height: "100vh" }}>
         <Responsive>{(props) => <CirclesWithD3 {...props} />}</Responsive>
+      </div>
+    );
+  },
+};
+
+export const ExampleMulitpleLines: StoryObj = {
+  name: "MulipleLines",
+  render: () => {
+    return (
+      <div style={{ width: "100vw", height: "100vh" }}>
+        <MultipleLines />
       </div>
     );
   },
