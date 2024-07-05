@@ -13,7 +13,7 @@ body {
     --yellow: #ffbb00;
 
     --background: var(--white);
-    --accent: var(--blue);
+    --accent: var(--red);
 
     margin: 0;
     padding: 0;
