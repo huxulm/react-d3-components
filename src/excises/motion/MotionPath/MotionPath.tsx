@@ -16,7 +16,7 @@ export const MotionPath = (props: any) => {
   const progress = useMotionValue(pathIndex);
   const fill = useTransform(progress, paths.map(getIndex), colors);
   const d = useTransform(progress, paths.map(getIndex), paths, {
-    mixer: (a, b) => interpolate(a, b, {maxSegmentLength: 0.1}),
+    mixer: (a, b) => interpolate(a, b, { maxSegmentLength: 0.1 }),
   });
 
   useEffect(() => {

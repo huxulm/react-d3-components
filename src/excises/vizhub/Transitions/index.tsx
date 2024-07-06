@@ -22,8 +22,8 @@ export const TransitionWithD3 = () => {
       [...prev].map((d) => ({
         ...d,
         r: Math.random() * (w / 10),
-        y: h / 3 + (Math.random() * h) / 3,
-        x: w / 3 + (Math.random() * w) / 3,
+        y: Math.random() * h,
+        x: Math.random() * w,
       }))
     );
   };
