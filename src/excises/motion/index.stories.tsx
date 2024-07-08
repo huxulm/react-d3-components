@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { Animation as ExampleAnimation } from "./Animation";
 import { KeyFrames as ExampleKeyFrames } from "./KeyFrames";
 import { Variants as ExampleVaraints } from "./Variants";
 import { Gesture as ExampleGesture } from "./Gesture";
@@ -18,19 +17,6 @@ const meta = {
   },
 } satisfies Meta<any>;
 export default meta;
-
-export const Animation: StoryObj = {
-  args: {},
-  render: () => {
-    const [count, setCount] = useState(0);
-    return (
-      <>
-        <Refresh onClick={() => setCount(count + 1)} />
-        <ExampleAnimation key={count} />
-      </>
-    );
-  },
-};
 
 export const KeyFrames: StoryObj<MotionProps> = {
   name: "KeyFrames",
@@ -108,7 +94,7 @@ export const MotionValues: StoryObj = {
   },
 };
 
-export const LineDraw: StoryObj<{width: number, height: number}> = {
+export const LineDraw: StoryObj<{ width: number; height: number }> = {
   args: {
     width: 200,
     height: 200,
@@ -117,11 +103,10 @@ export const LineDraw: StoryObj<{width: number, height: number}> = {
     layout: "centered",
   },
   render: (args) => {
-    return <LineDrawExample {...args}/>;
+    return <LineDrawExample {...args} />;
   },
 };
 
-export const Transition: StoryObj = {
-  render: () => <TransitionExample />
-}
-
+export const Transition: StoryObj<typeof TransitionExample> = {
+  render: () => <TransitionExample />,
+};
