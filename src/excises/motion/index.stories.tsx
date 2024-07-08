@@ -9,6 +9,7 @@ import { MotionProps } from "framer-motion";
 import { DragExample } from "./Drag";
 import { ExampleMotionValues } from "./MotionValues";
 import { LineDrawExample } from "./LineDraw";
+import { TransitionExample } from "./Transition";
 
 const meta = {
   title: "Excises/motion",
@@ -120,4 +121,7 @@ export const LineDraw: StoryObj<{width: number, height: number}> = {
   },
 };
 
+export const Transition: StoryObj = {
+  render: () => <TransitionExample />
+}
 
