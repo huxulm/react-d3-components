@@ -4,7 +4,7 @@ import { Responsive } from "@/common/utils/responsive/Responsive";
 import { useCircleWithD3 } from "./CirclesWithD3/useCircleWithD3";
 import { CirclesWithD3 } from "./CirclesWithD3";
 import { MultipleLines } from "./MultipleLines";
-import { TransitionWithD3 } from "./Transitions";
+import { TransitionWithD3, Transition } from "./Transitions";
 
 export default {
   title: "Excises/vizhub",
@@ -47,4 +47,9 @@ export const ExampleMulitpleLines: StoryObj = {
 export const ExampleD3Transition: StoryObj = {
   name: "Transition",
   render: () => <TransitionWithD3 />,
+};
+
+export const ExampleD3Transition_1: StoryObj = {
+  name: "Transition_1",
+  render: () => <Transition />,
 };
