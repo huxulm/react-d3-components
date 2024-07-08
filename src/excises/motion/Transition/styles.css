@@ -113,12 +113,6 @@ body {
     transform: rotate(-90deg);
   }
   
-  circle {
-    stroke-dashoffset: 0;
-    stroke-width: 15%;
-    fill: none;
-  }
-  
   .bg {
     stroke: var(--accent);
     opacity: 0.3;
