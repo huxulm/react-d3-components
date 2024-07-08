@@ -1,10 +1,11 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { useRef } from "react";
 import { Responsive } from "@/common/utils/responsive/Responsive";
-import { useCircleWithD3 } from "./CirclesWithD3/useCircleWithD3";
-import { CirclesWithD3 } from "./CirclesWithD3";
+import { useCircleWithD3 } from "./Circles/useCircleWithD3";
+import { CirclesWithD3 } from "./Circles";
 import { MultipleLines } from "./MultipleLines";
 import { TransitionWithD3, Transition } from "./Transitions";
+import { Zoomable, ZoomableD3 } from "./Zoomable";
 
 export default {
   title: "Excises/vizhub",
@@ -45,11 +46,21 @@ export const ExampleMulitpleLines: StoryObj = {
 };
 
 export const ExampleD3Transition: StoryObj = {
-  name: "Transition",
+  name: "Transition (d3-transition)",
   render: () => <TransitionWithD3 />,
 };
 
 export const ExampleD3Transition_1: StoryObj = {
-  name: "Transition_1",
+  name: "Transition (only React)",
   render: () => <Transition />,
+};
+
+export const ExampleD3Zoomable: StoryObj = {
+  name: "Zoomable (d3-zoom)",
+  render: () => <ZoomableD3 />,
+};
+
+export const ExampleZoomable: StoryObj = {
+  name: "Zoomable (only React)",
+  render: () => <Zoomable />,
 };

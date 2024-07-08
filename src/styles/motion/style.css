@@ -20,7 +20,6 @@ body {
     background-color: var(--background);
     color: var(--accent);
     padding-bottom: 100px;
-    overflow: hidden;
 }
 
 #root {
@@ -161,7 +160,7 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--accent);
+    background: var(--ash-black);
     -webkit-border-radius: 1ex;
 }
 
