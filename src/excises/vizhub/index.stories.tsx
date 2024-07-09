@@ -6,6 +6,7 @@ import { CirclesWithD3 } from "./Circles";
 import { MultipleLines } from "./MultipleLines";
 import { TransitionWithD3, Transition } from "./Transitions";
 import { Zoomable, ZoomableD3 } from "./Zoomable";
+import { BrushD3 } from "./Brush";
 
 export default {
   title: "Excises/vizhub",
@@ -63,4 +64,9 @@ export const ExampleD3Zoomable: StoryObj = {
 export const ExampleZoomable: StoryObj = {
   name: "Zoomable (only React)",
   render: () => <Zoomable />,
+};
+
+export const ExampleD3Brush: StoryObj = {
+  name: "Brush (d3-brush)",
+  render: () => <BrushD3 />,
 };
