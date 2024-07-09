@@ -1,0 +1,66 @@
+export const data = [
+  {
+    name: "Sun",
+    distance: 0,
+    radius: 109,
+    fill: "#FFC800",
+  },
+  {
+    name: "Mercury",
+    distance: 0.38709893,
+    radius: 0.3826,
+    fill: "#969696",
+    labelOffset: -76,
+  },
+  {
+    name: "Venus",
+    distance: 0.72333199,
+    radius: 0.9488,
+    fill: "#DDD3C2",
+    labelOffset: -61,
+  },
+  {
+    name: "Earth",
+    distance: 1,
+    radius: 1,
+    fill: "#6388B4",
+    labelOffset: -45,
+  },
+  {
+    name: "Mars",
+    distance: 1.52366231,
+    radius: 0.53247,
+    fill: "#C1440E",
+    labelOffset: -27,
+  },
+  {
+    name: "Jupiter",
+    distance: 5.20336301,
+    radius: 11.209,
+    fill: "#E5b380",
+  },
+  {
+    name: "Saturn",
+    distance: 9.53707032,
+    radius: 9.449,
+    fill: "#D9BF77",
+  },
+  {
+    name: "Uranus",
+    distance: 19.19126393,
+    radius: 4.007,
+    fill: "#8FD3FF",
+  },
+  {
+    name: "Neptune",
+    distance: 30.06896348,
+    radius: 3.883,
+    fill: "#4385F5",
+  },
+  {
+    name: "Pluto",
+    distance: 39.482,
+    radius: 0.1868,
+    fill: "#E3DBCF",
+  },
+];

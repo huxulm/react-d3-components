@@ -7,6 +7,7 @@ import { MultipleLines } from "./MultipleLines";
 import { TransitionWithD3, Transition } from "./Transitions";
 import { Zoomable, ZoomableD3 } from "./Zoomable";
 import { BrushD3 } from "./Brush";
+import { SolarSystemdD3 } from "./SolarSystem";
 
 export default {
   title: "Excises/vizhub",
@@ -69,4 +70,9 @@ export const ExampleZoomable: StoryObj = {
 export const ExampleD3Brush: StoryObj = {
   name: "Brush (d3-brush)",
   render: () => <BrushD3 />,
+};
+
+export const ExampleSolarySystem: StoryObj = {
+  name: "SolarSystem (d3)",
+  render: () => <SolarSystemdD3 />,
 };
