@@ -10,6 +10,7 @@ import { BrushD3 } from "./Brush";
 import { SolarSystemdD3 } from "./SolarSystem";
 import { VoronoiD3, VoronoiDragWithD3 } from "./Voronoi";
 import { HierarchyD3 } from "./Hierarchy";
+import { Trees } from "./Trees";
 
 export default {
   title: "Excises/vizhub",
@@ -92,4 +93,9 @@ export const ExampleVoronoi: StoryObj = {
 export const ExampleHierarchyD3: StoryObj = {
   name: "Hierarchy (d3)",
   render: () => <HierarchyD3 />,
+};
+
+export const ExampleHierarchyTreesD3: StoryObj = {
+  name: "HierarchyTrees (d3)",
+  render: () => <Trees />,
 };
