@@ -8,7 +8,7 @@ import { TransitionWithD3, Transition } from "./Transitions";
 import { Zoomable, ZoomableD3 } from "./Zoomable";
 import { BrushD3 } from "./Brush";
 import { SolarSystemdD3 } from "./SolarSystem";
-import { Voronoi } from "./Voronoi";
+import { VoronoiD3, VoronoiDragWithD3 } from "./Voronoi";
 
 export default {
   title: "Excises/vizhub",
@@ -80,5 +80,10 @@ export const ExampleSolarySystem: StoryObj = {
 
 export const ExampleD3Voronoi: StoryObj = {
   name: "Voronoi (d3)",
-  render: () => <Voronoi />,
+  render: () => <VoronoiD3 />,
+};
+
+export const ExampleVoronoi: StoryObj = {
+  name: "Voronoi (react)",
+  render: () => <VoronoiDragWithD3 />,
 };
