@@ -36,13 +36,13 @@ export type LinksSelection = Selection<
   null
 > | null;
 
-const radialDiagonal = linkRadial<HierarchyPointNode<DataShape>, any, any>()
+export const radialDiagonal = linkRadial<HierarchyPointNode<DataShape>, any, any>()
   .angle((d) => d.x)
-  .radius((d) => d.y);
+  .radius((d) => d.y) as any;
 
 // color fn
-const colorScale = scaleSequential(interpolateRainbow);
-const colorFn = (n: number) => (_: any, i: number) => colorScale(i / n);
+export const colorScale = scaleSequential(interpolateRainbow);
+export const colorFn = (n: number) => (_: any, i: number) => colorScale(i / n);
 
 export const main = (
   container: RefObject<HTMLDivElement>,
