@@ -93,7 +93,7 @@ export const D3Trees = () => {
   const linksRef = useRef<LinksSelection>(null);
 
   // transition druation
-  const [duration, setDuration] = useState(1000);
+  const [duration, setDuration] = useState(1);
   const [layoutType, setLayoutType] = useState<LayoutType>("radial tree");
 
   const getSize = useCallback(
@@ -167,7 +167,7 @@ export const D3Trees = () => {
       <Controller
         duration={duration}
         mn={0}
-        mx={2}
+        mx={10}
         setDuration={setDuration}
         changeToRadial={changeToRadial}
         changeToRadialCluster={changeToRadialCluster}
