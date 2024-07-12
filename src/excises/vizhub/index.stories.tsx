@@ -11,7 +11,7 @@ import { SolarSystemdD3 } from "./SolarSystem";
 import { VoronoiD3, VoronoiDragWithD3 } from "./Voronoi";
 import { HierarchyD3 } from "./Hierarchy";
 import { Trees, D3Trees } from "./Trees";
-import { Dount } from "./Dount";
+import { Dount, DountNoFramerMotion } from "./Dount";
 
 export default {
   title: "Excises/vizhub",
@@ -107,6 +107,11 @@ export const ExampleHierarchyTrees: StoryObj = {
 };
 
 export const ExampleDounts: StoryObj = {
-  name: "Dounts (react)",
+  name: "Dounts (react + motion)",
   render: () => <Dount />,
+};
+
+export const ExampleDountsWithoutMotion: StoryObj = {
+  name: "Dounts (react with motion)",
+  render: () => <DountNoFramerMotion />,
 };
