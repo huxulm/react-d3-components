@@ -22,12 +22,16 @@ interface DataShape {
 
 const Controller = ({
   dounts,
+  borderWidth,
   total,
   mn,
   mx,
   setState,
+  setBorderWidth,
 }: {
   dounts: number;
+  borderWidth: number;
+  setBorderWidth: Dispatch<SetStateAction<number>>;
   total: number;
   mn: number;
   mx: number;
@@ -56,6 +60,16 @@ const Controller = ({
         />
       </label>
       <label>
+        <label>块-边宽 {borderWidth}</label>
+        <input
+          type="range"
+          value={borderWidth}
+          min={0}
+          max={5}
+          onChange={(e) => setBorderWidth(parseInt(e.target.value))}
+        />
+      </label>
+      <label>
         <label>总块数 {total}</label>
       </label>
     </div>
@@ -63,7 +77,7 @@ const Controller = ({
 };
 
 export const Dount = () => {
-  const [dounts, setDounts] = useState(30); // how many dounts in circle
+  const [dounts, setDounts] = useState(15); // how many dounts in circle
   const totalFn = (n: number) => (n * (6 + (n - 1) * 5)) / 2;
   const ref = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -86,12 +100,14 @@ export const Dount = () => {
     return Array(dounts)
       .fill(null)
       .map<Array<PieArcDatum<DataShape>>>((_, i) => {
-        return pie<DataShape>()
-          .padAngle(((dounts / (i + 1)) * 0.2 * Math.PI) / 180)
-          .value((d) => d.value)(
-          new Array(5 * i + 3)
-            .fill(null)
-            .map((_, i) => ({ id: i * 2 + 1, value: 1 }))
+        return (
+          pie<DataShape>()
+            // .padAngle(((dounts / (i + 1)) * 0.2 * Math.PI) / 180)
+            .value((d) => d.value)(
+            new Array(5 * i + 3)
+              .fill(null)
+              .map((_, i) => ({ id: i * 2 + 1, value: 1 }))
+          )
         );
       });
   }, [sizes, rScale, dounts]);
@@ -107,18 +123,22 @@ export const Dount = () => {
       zoom().on("zoom", (event) => setZoomTransform(event.transform)) as any
     );
   }, [ref, svgRef]);
+
   const [zoomTransform, setZoomTransform] = useState("");
+  const [borderWidth, setBorderWidth] = useState(1);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }} ref={ref}>
       <Controller
         total={totalFn(dounts)}
         dounts={dounts}
+        borderWidth={borderWidth}
+        setBorderWidth={setBorderWidth}
         setState={setDounts}
         mn={1}
-        mx={100}
+        mx={50}
       />
-      <svg
+      <motion.svg
         ref={svgRef}
         width={sizes.width}
         height={sizes.height}
@@ -129,15 +149,21 @@ export const Dount = () => {
             return p.map((d) => (
               <motion.path
                 fill={color((totalFn(i + 1) * 0.9) / totalFn(dounts))}
-                stroke={"black"}
-                strokeWidth={1}
-                d={getArcFn(i)(d)!}
+                stroke={"#000"}
+                strokeWidth={borderWidth}
+                initial={{ d: "", opacity: 0, rotate: 10 }}
+                animate={{
+                  d: getArcFn(i)(d)!,
+                  opacity: 1,
+                  rotate: 0,
+                }}
+                transition={{ duration: 0.2, delay: (i * 5) / totalFn(dounts) }}
                 opacity={708 / 1000}
               />
             ));
           })}
         </motion.g>
-      </svg>
+      </motion.svg>
     </div>
   );
 };
