@@ -18,24 +18,29 @@ import { interpolateRainbow } from "d3";
 interface DataShape {
   id: number;
   value: number;
+  color: string;
 }
 
 const Controller = ({
+  offsetDount,
   dounts,
   borderWidth,
   total,
   mn,
   mx,
   setState,
+  setOffsetState,
   setBorderWidth,
 }: {
   dounts: number;
+  offsetDount: number;
   borderWidth: number;
   setBorderWidth: Dispatch<SetStateAction<number>>;
   total: number;
   mn: number;
   mx: number;
   setState: Dispatch<SetStateAction<number>>;
+  setOffsetState: Dispatch<SetStateAction<number>>;
 }) => {
   return (
     <div
@@ -50,13 +55,23 @@ const Controller = ({
       }}
     >
       <label>
-        <label>圈数 {dounts}</label>
+        <label>外圈 {dounts}</label>
         <input
           type="range"
           value={dounts}
           min={mn}
           max={mx}
           onChange={(e) => setState(parseInt(e.target.value))}
+        />
+      </label>
+      <label>
+        <label>起始圈 {offsetDount}</label>
+        <input
+          type="range"
+          value={offsetDount}
+          min={mn}
+          max={dounts - 1}
+          onChange={(e) => setOffsetState(parseInt(e.target.value))}
         />
       </label>
       <label>
@@ -78,10 +93,12 @@ const Controller = ({
 
 export const Dount = () => {
   const [dounts, setDounts] = useState(15); // how many dounts in circle
+  const [offsetDount, setOffsetDount] = useState(0); // how many dounts in circle
   const totalFn = (n: number) => (n * (6 + (n - 1) * 5)) / 2;
   const ref = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const [sizes, setSizes] = useState<Size>({ width: 0.001, height: 0.001 });
+  const color = scaleSequential(interpolateRainbow); // color scale
   const rScale = useCallback(() => {
     const { width = 0.001, height = 0.001 } = sizes;
     const radius = Math.min(width, height) / 2;
@@ -97,22 +114,29 @@ export const Dount = () => {
   );
 
   const pieData = useMemo((): Array<Array<PieArcDatum<DataShape>>> => {
-    return Array(dounts)
-      .fill(null)
-      .map<Array<PieArcDatum<DataShape>>>((_, i) => {
-        return (
-          pie<DataShape>()
-            // .padAngle(((dounts / (i + 1)) * 0.2 * Math.PI) / 180)
-            .value((d) => d.value)(
-            new Array(5 * i + 3)
-              .fill(null)
-              .map((_, i) => ({ id: i * 2 + 1, value: 1 }))
-          )
-        );
-      });
-  }, [sizes, rScale, dounts]);
+    return (
+      Array(dounts)
+        .fill(null)
+        // .splice(offsetDount, dounts) // dounts in domain
+        .map<Array<PieArcDatum<DataShape>>>((_, i) => {
+          if (i < offsetDount) {
+            return [];
+          }
+          return (
+            pie<DataShape>()
+              // .padAngle(((dounts / (i + 1)) * 0.2 * Math.PI) / 180)
+              .value((d) => d.value)(
+              new Array(5 * i + 3).fill(null).map((_, i) => ({
+                id: i * 2 + 1,
+                value: 1,
+                color: color(Math.random()),
+              })) // radom color for ease mocking
+            )
+          );
+        })
+    );
+  }, [sizes, rScale, dounts, offsetDount]);
 
-  const color = scaleSequential(interpolateRainbow);
   useEffect(() => {
     setSizes({
       width: ref.current!.clientWidth,
@@ -132,10 +156,12 @@ export const Dount = () => {
       <Controller
         total={totalFn(dounts)}
         dounts={dounts}
+        offsetDount={offsetDount}
         borderWidth={borderWidth}
         setBorderWidth={setBorderWidth}
         setState={setDounts}
-        mn={1}
+        setOffsetState={setOffsetDount}
+        mn={0}
         mx={50}
       />
       <motion.svg
@@ -148,17 +174,18 @@ export const Dount = () => {
           {pieData.map((p, i) => {
             return p.map((d) => (
               <motion.path
-                fill={color((totalFn(i + 1) * 0.9) / totalFn(dounts))}
-                stroke={"#000"}
+                // fill={color((totalFn(i + 1) * 0.9) / totalFn(dounts))}
+                fill={d.data.color}
+                stroke={"#FFF"}
+                strokeLinecap={"round"}
                 strokeWidth={borderWidth}
                 initial={{ d: "", opacity: 0, rotate: 10 }}
                 animate={{
                   d: getArcFn(i)(d)!,
-                  opacity: 1,
+                  opacity: 890 / 1000,
                   rotate: 0,
                 }}
                 transition={{ duration: 0.2, delay: (i * 5) / totalFn(dounts) }}
-                opacity={708 / 1000}
               />
             ));
           })}
