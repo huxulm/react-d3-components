@@ -17,7 +17,7 @@ export const Radial: FC<RadialProps> = ({
   const [offsetDount] = useState<number>(initOffsetDount || 0);
 
   const ref = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState<Size>({ width: 0, height: 0 });
+  const [size, setSize] = useState<Size | null>(null);
   useEffect(() => {
     setSize({
       width: ref.current!.clientWidth,
@@ -26,7 +26,7 @@ export const Radial: FC<RadialProps> = ({
   }, [dounts, offsetDount]);
   return (
     <div ref={ref} style={{ width: "100vw", height: "100vh" }}>
-      <VizWrapper width={size.width} height={size.height} />
+      {size && <VizWrapper width={size.width} height={size.height} />}
     </div>
   );
 };
