@@ -12,6 +12,7 @@ import { VoronoiD3, VoronoiDragWithD3 } from "./Voronoi";
 import { HierarchyD3 } from "./Hierarchy";
 import { Trees, D3Trees } from "./Trees";
 import { Dount, DountNoFramerMotion } from "./Dount";
+import { Radial } from "./Radial";
 
 export default {
   title: "Excises/vizhub",
@@ -112,6 +113,11 @@ export const ExampleDounts: StoryObj = {
 };
 
 export const ExampleDountsWithoutMotion: StoryObj = {
-  name: "Dounts (react with motion)",
+  name: "Dounts (react no motion)",
   render: () => <DountNoFramerMotion />,
+};
+
+export const ExampleRadial: StoryObj = {
+  name: "Radial (d3)",
+  render: () => <Radial />,
 };
