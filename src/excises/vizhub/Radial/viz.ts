@@ -1,29 +1,76 @@
 import { RefObject } from "react";
-import { select, Selection } from "d3-selection";
-import { scaleLinear, ScaleLinear } from "d3-scale";
-import { pointRadial } from "d3-shape";
+import { select, selectAll, Selection } from "d3-selection";
+import { scaleLinear, ScaleLinear, scaleSequential } from "d3-scale";
+import { interpolateRainbow } from "d3-scale-chromatic";
+import { pointRadial, lineRadial, curveLinearClosed as curve } from "d3-shape";
+import { zoom } from "d3-zoom";
 
-type SVGSelection = Selection<SVGSVGElement, any, null, undefined>;
+import { DataShape } from "./data";
+
+type SVGSelection = Selection<SVGGElement, any, null, undefined>;
 type XYScale = ScaleLinear<number, number, never>;
 export const viz = (
   container: RefObject<SVGSVGElement>,
   width: number,
-  height: number
+  height: number,
+  innerRadius: number,
+  outerRadius: number,
+  data: DataShape[][],
+  getDountScale: (i: number) => ScaleLinear<number, number, never>,
+  xTickCount: number
 ) => {
   //   const width = container.current!.clientWidth;
   //   const height = container.current!.clientHeight;
-  const innerRadius = height / 12;
-  const outerRadius = height / 2;
+  //   const innerRadius = height / 12;
+  //   const outerRadius = height / 2;
+
+  // clear
+  selectAll("svg > g").remove();
+
+  // color
+  const color = scaleSequential(interpolateRainbow);
+
   const svg = select<SVGSVGElement, any>(container.current!);
   svg.attr("viewBox", [-width / 2, -height / 2, width, height]);
+
+  const g = svg.append("g");
+  const zoomBehavior = zoom().on("zoom", (event) =>
+    g.attr("transform", event.transform)
+  );
+  svg.call(zoomBehavior as any);
+
   const x = scaleLinear()
     .domain([0, Math.PI * 2])
     .range([0, 360]);
+
   const y = scaleLinear().range([innerRadius, outerRadius]).domain([0, 20]);
-  // axes
-  const tickCount = 12;
-  xAxes(svg, innerRadius, outerRadius, x, tickCount);
-  yAxes(svg, y);
+
+  // render x Axis
+  xAxes(g, innerRadius, outerRadius, x, xTickCount);
+
+  //  render y Axis
+  yAxes(g, y, data.length + 1);
+
+  const line = lineRadial<DataShape>().curve(curve);
+
+  // render dounts
+  g.append("g").call((g) =>
+    g
+      .selectAll("g")
+      .data(data)
+      .join("g")
+      .call((g) =>
+        g
+          .append("path")
+          .attr("stroke", (_, i) => color((i + 1) / data.length))
+          .attr("fill", "none")
+          .attr("d", (d, i) => {
+            return line
+              .angle((_, j) => (j * Math.PI * 2) / d.length)
+              .radius((v) => getDountScale(i)(v.value))(d);
+          })
+      )
+  );
 };
 
 export const xAxes = (
@@ -33,7 +80,6 @@ export const xAxes = (
   x: XYScale,
   tickCount: number
 ) => {
-  // xAxis
   const step = (Math.PI * 2) / Math.max(4, tickCount);
   const ticks = Array.from({ length: tickCount }, (_, i) => i * step);
   g.append("g")
@@ -48,11 +94,11 @@ export const xAxes = (
           g
             .append("path")
             .attr("stroke", "#000")
-            .attr("stroke-opacity", 0.3)
+            .attr("stroke-opacity", 0.2)
             .attr(
               "d",
               (d) =>
-                `M${pointRadial(d, innerRadius)}L${pointRadial(d, outerRadius)}`
+                `M${pointRadial(d, innerRadius)}L${pointRadial(d, outerRadius + 50)}`
             )
         )
         .call((g) =>
@@ -66,15 +112,14 @@ export const xAxes = (
               ([a, b]) => `
            M${pointRadial(a, innerRadius)}
            A${innerRadius},${innerRadius} 0,0,1 ${pointRadial(b, innerRadius)}
-         `
-            )
+         `)
         )
         .call((g) =>
           g
             .append("text")
             .append("textPath")
             .attr("startOffset", 6)
-            .attr("stroke", "red")
+            .attr("stroke", "steelblue")
             .attr("stoke-width", 1)
             .attr("xlink:href", (_, i) => `#p-${i}`)
             .text((d) => `${Math.ceil(x(d))}°`)
@@ -82,7 +127,7 @@ export const xAxes = (
     );
 };
 
-const yAxes = (g: SVGSelection, y: XYScale) => {
+const yAxes = (g: SVGSelection, y: XYScale, tickCount: number) => {
   g.append("g")
     .attr("text-anchor", "middle")
     .attr("font-family", "sans-serif")
@@ -90,7 +135,7 @@ const yAxes = (g: SVGSelection, y: XYScale) => {
     .call((g) =>
       g
         .selectAll("g")
-        .data(y.ticks().reverse())
+        .data(y.ticks(tickCount).reverse())
         .join("g")
         .attr("fill", "none")
         .call((g) =>

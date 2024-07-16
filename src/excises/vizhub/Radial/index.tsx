@@ -1,6 +1,7 @@
-import { Size } from "@/common/utils/responsive/useParentSize";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { VizWrapper } from "./VizWrapper";
+import { Responsive } from "@/common/utils/responsive/Responsive";
+import { dataFn, DataShape } from "./data";
 
 interface RadialProps {
   // Total number of dounts
@@ -13,20 +14,26 @@ export const Radial: FC<RadialProps> = ({
   initDounts,
   initOffsetDount,
 }: RadialProps) => {
-  const [dounts] = useState<number>(initDounts || 0);
+  const [dounts] = useState<number>(initDounts || 20);
   const [offsetDount] = useState<number>(initOffsetDount || 0);
-
+  const data = useMemo<DataShape[][]>(
+    () =>
+      dataFn(
+        dounts,
+        Array.from({ length: dounts }, (_, i) => 5 * i + 3)
+      ),
+    [dounts]
+  );
   const ref = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState<Size | null>(null);
-  useEffect(() => {
-    setSize({
-      width: ref.current!.clientWidth,
-      height: ref.current!.clientHeight,
-    });
-  }, [dounts, offsetDount]);
+  useEffect(() => {}, [dounts, offsetDount]);
   return (
     <div ref={ref} style={{ width: "100vw", height: "100vh" }}>
-      {size && <VizWrapper width={size.width} height={size.height} />}
+      <Responsive>
+        {({ width, height }) =>
+          width &&
+          height && <VizWrapper width={width} height={height} data={data} />
+        }
+      </Responsive>
     </div>
   );
 };
