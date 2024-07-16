@@ -1,13 +1,21 @@
 import { RefObject } from "react";
-import { select, selectAll, Selection } from "d3-selection";
+import { select, Selection } from "d3-selection";
 import { scaleLinear, ScaleLinear, scaleSequential } from "d3-scale";
 import { interpolateRainbow } from "d3-scale-chromatic";
-import { pointRadial, lineRadial, curveLinearClosed as curve } from "d3-shape";
+import { pointRadial, lineRadial, curveLinearClosed } from "d3-shape";
 import { zoom } from "d3-zoom";
+import { transition } from "d3-transition";
+import { easeLinear as easeFn } from "d3-ease";
 
 import { DataShape } from "./data";
 
 type SVGSelection = Selection<SVGGElement, any, null, undefined>;
+export type DountsSelection = Selection<
+  SVGPathElement,
+  DataShape[],
+  SVGGElement,
+  null
+>;
 type XYScale = ScaleLinear<number, number, never>;
 export const viz = (
   container: RefObject<SVGSVGElement>,
@@ -18,18 +26,19 @@ export const viz = (
   data: DataShape[][],
   getDountScale: (i: number) => ScaleLinear<number, number, never>,
   xTickCount: number
-) => {
+): DountsSelection => {
   //   const width = container.current!.clientWidth;
   //   const height = container.current!.clientHeight;
   //   const innerRadius = height / 12;
   //   const outerRadius = height / 2;
 
   // clear
-  selectAll("svg > g").remove();
+  // selectAll("svg > g").remove();
 
   // color
   const color = scaleSequential(interpolateRainbow);
 
+  const slow = transition().duration(750).ease(easeFn);
   const svg = select<SVGSVGElement, any>(container.current!);
   svg.attr("viewBox", [-width / 2, -height / 2, width, height]);
 
@@ -51,27 +60,58 @@ export const viz = (
   //  render y Axis
   yAxes(g, y, data.length + 1);
 
-  const line = lineRadial<DataShape>().curve(curve);
+  const line = lineRadial<DataShape>().curve(curveLinearClosed);
 
   // render dounts
-  g.append("g").call((g) =>
-    g
-      .selectAll("g")
-      .data(data)
-      .join("g")
-      .call((g) =>
-        g
-          .append("path")
-          .attr("stroke", (_, i) => color((i + 1) / data.length))
-          .attr("fill", "none")
-          .attr("d", (d, i) => {
-            return line
-              .angle((_, j) => (j * Math.PI * 2) / d.length)
-              .radius((v) => getDountScale(i)(v.value))(d);
-          })
-      )
-  );
+  let dountsG: DountsSelection;
+  g.append("g")
+    .data([null])
+    .join("g")
+    .call((g) => {
+      dountsG = g
+        .append("g")
+        .selectAll("path")
+        .data(data)
+        .enter()
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", (_, i) => color((i + 1) / data.length))
+        .attr("d", (d, i) => {
+          return line
+            .angle((_, j) => (j * Math.PI * 2) / d.length)
+            .radius((v) => getDountScale(i)(v.value))(d);
+        })
+        .attr("stroke-opacity", 0)
+        .call((selection) =>
+          selection
+            .transition(slow)
+            .delay((_, i) => (i * 1000) / Math.max(1, data.length))
+            .attr("stroke-opacity", 1)
+        );
+    });
+  return dountsG!;
 };
+
+export function transitionDounts(
+  g: DountsSelection,
+  data: DataShape[][],
+  getDountScale: (i: number) => ScaleLinear<number, number, never>,
+  duration: number,
+  curve: any,
+) {
+  const fast = transition().duration(duration).ease(easeFn);
+  const line = lineRadial<DataShape>().curve(curve);
+  g.data(data).call((selection) => {
+    selection
+      .transition(fast)
+      .attr("stroke-opacity", 1)
+      .attr("d", (d, i) => {
+        return line
+          .angle((_, j) => (j * Math.PI * 2) / d.length)
+          .radius((v) => getDountScale(i)(v.value))(d);
+      });
+  });
+}
 
 export const xAxes = (
   g: SVGSelection,
@@ -112,7 +152,8 @@ export const xAxes = (
               ([a, b]) => `
            M${pointRadial(a, innerRadius)}
            A${innerRadius},${innerRadius} 0,0,1 ${pointRadial(b, innerRadius)}
-         `)
+         `
+            )
         )
         .call((g) =>
           g

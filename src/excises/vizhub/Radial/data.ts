@@ -5,13 +5,14 @@ export interface DataShape {
 
 export const dataFn = (
   dounts: number,
-  counts: number[]
+  counts: number[],
+  valueFn?: () => number
 ): Array<Array<DataShape>> => {
   let id = -1;
   return Array.from<any, Array<DataShape>>({ length: dounts }, (_, i) => {
     return Array.from<any, DataShape>({ length: counts[i] }, () => {
       id++;
-      return { id, value: Math.random() };
+      return { id, value: !valueFn ? Math.random() : valueFn() };
     });
   });
 };

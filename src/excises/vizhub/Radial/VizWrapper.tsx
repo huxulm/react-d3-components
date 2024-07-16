@@ -1,15 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { scaleLinear } from "d3-scale";
 import { extent } from "d3-array";
-import { viz } from "./viz";
+import { DountsSelection, transitionDounts, viz } from "./viz";
 import { DataShape } from "./data";
 interface VizWrapperProps {
   width: number;
   height: number;
+  updateDuration: number;
   data?: DataShape[][];
+  init?: boolean;
+  curve: any;
 }
-export const VizWrapper = ({ width, height, data = [] }: VizWrapperProps) => {
+export const VizWrapper = ({ width, height, data = [], init = true, updateDuration, curve }: VizWrapperProps) => {
   const ref = useRef<SVGSVGElement>(null);
+  const refDountsSelection = useRef<DountsSelection | null>(null);
   const radius = Math.min(width, height) / 2;
   const innerRadius = radius / 8;
   const outerRadius = radius;
@@ -30,7 +34,23 @@ export const VizWrapper = ({ width, height, data = [] }: VizWrapperProps) => {
   );
 
   useEffect(() => {
-    viz(ref, width, height, radius / 8, radius, data, getDountScale, 12);
-  }, [width, height]);
+    if (!refDountsSelection.current) {
+      refDountsSelection.current = viz(
+        ref,
+        width,
+        height,
+        innerRadius,
+        outerRadius,
+        data,
+        getDountScale,
+        12
+      );
+    }
+  }, [width, height, data]);
+  useEffect(() => {
+    if (refDountsSelection.current && !init) {
+      transitionDounts(refDountsSelection.current, data, getDountScale, updateDuration, curve);
+    }
+  }, [data, init, updateDuration]);
   return <svg width={width} height={height} ref={ref} />;
 };
