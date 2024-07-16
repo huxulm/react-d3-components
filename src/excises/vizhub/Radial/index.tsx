@@ -50,7 +50,7 @@ export const Radial: FC<RadialProps> = ({
   const [status, setStatus] = useState<RadialStatus>({
     init: true,
     duration: DefaultDataFetchDuration,
-    curve: curveBasisClosed,
+    curve: curveCardinalClosed,
     data: dataFn(
       dounts,
       Array.from({ length: dounts }, (_, i) => 5 * i + 3),
@@ -73,7 +73,7 @@ export const Radial: FC<RadialProps> = ({
     setStatus({
       init: false,
       duration: DefaultDataFetchDuration,
-      curve: curveBasisClosed,
+      curve: curveCardinalClosed,
       data: dataFn(
         dounts,
         Array.from({ length: dounts }, (_, i) => 5 * i + 3),
@@ -106,7 +106,7 @@ export const Radial: FC<RadialProps> = ({
   ];
 
   return (
-    <div ref={ref} style={{ width: "100vw", height: "100vh" }}>
+    <div ref={ref} style={{ width: "100%", height: "100%" }}>
       <div
         style={{
           position: "absolute",
@@ -120,7 +120,7 @@ export const Radial: FC<RadialProps> = ({
         <button onClick={update}>start randomize</button>
         <button onClick={reset}>reset</button>
         <label>
-          <label>过渡时常</label>
+          <label>frequency</label>
           <input
             type="range"
             value={status.duration}

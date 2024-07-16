@@ -97,7 +97,7 @@ export function transitionDounts(
   data: DataShape[][],
   getDountScale: (i: number) => ScaleLinear<number, number, never>,
   duration: number,
-  curve: any,
+  curve: any
 ) {
   const fast = transition().duration(duration).ease(easeFn);
   const line = lineRadial<DataShape>().curve(curve);
@@ -150,8 +150,32 @@ export const xAxes = (
             .attr(
               "d",
               ([a, b]) => `
-           M${pointRadial(a, innerRadius)}
-           A${innerRadius},${innerRadius} 0,0,1 ${pointRadial(b, innerRadius)}
+           M${pointRadial(a, innerRadius - 10)}
+           A${innerRadius - 10},${innerRadius - 10} 0,0,1 ${pointRadial(b, innerRadius - 10)}
+         `
+            )
+        )
+        .call((g) =>
+          g
+            .append("text")
+            .append("textPath")
+            .attr("startOffset", 0)
+            .attr("stroke", "steelblue")
+            .attr("stoke-width", 1)
+            .attr("xlink:href", (_, i) => `#p-${i}`)
+            .text((d) => `${Math.ceil(x(d))}°`)
+        )
+        .call((g) =>
+          g
+            .append("path")
+            .attr("id", (_, i) => `po-${i}`)
+            .datum((d) => [d, d + step])
+            .attr("fill", "none")
+            .attr(
+              "d",
+              ([a, b]) => `
+           M${pointRadial(a, outerRadius + 20)}
+           A${outerRadius + 20},${outerRadius + 20} 0,0,1 ${pointRadial(b, outerRadius + 20)}
          `
             )
         )
@@ -162,7 +186,7 @@ export const xAxes = (
             .attr("startOffset", 6)
             .attr("stroke", "steelblue")
             .attr("stoke-width", 1)
-            .attr("xlink:href", (_, i) => `#p-${i}`)
+            .attr("xlink:href", (_, i) => `#po-${i}`)
             .text((d) => `${Math.ceil(x(d))}°`)
         )
     );

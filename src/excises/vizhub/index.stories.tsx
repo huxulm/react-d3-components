@@ -119,5 +119,35 @@ export const ExampleDountsWithoutMotion: StoryObj = {
 
 export const ExampleRadial: StoryObj = {
   name: "Radial (d3)",
-  render: () => <Radial />,
+  render: () => (
+    <div style={{ width: "100vw", height: "100vh" }}>
+      <Radial />
+    </div>
+  ),
+};
+
+export const ExampleGridsRadial: StoryObj = {
+  name: "Radial Grids (d3)",
+  render: () => {
+    return (
+      <div style={{ width: "100vw", height: "100vh" }}>
+        <div style={{ height: "50vh", width: "100vw", display: "flex" }}>
+          <div style={{ height: "100%", width: "50vw" }}>
+            <Radial initDounts={5}/>
+          </div>
+          <div style={{ height: "100%", width: "50vw" }}>
+            <Radial initDounts={10}/>
+          </div>
+        </div>
+        <div style={{ height: "50vh", width: "100vw", display: "flex" }}>
+          <div style={{ height: "100%", width: "50vw" }}>
+            <Radial initDounts={20}/>
+          </div>
+          <div style={{ height: "100%", width: "50vw" }}>
+            <Radial initDounts={30}/>
+          </div>
+        </div>
+      </div>
+    );
+  },
 };
