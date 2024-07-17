@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { scaleLinear } from "d3-scale";
-import { extent } from "d3-array";
-import { DountsSelection, transitionDounts, viz } from "./viz";
+import {
+  DountsSelection,
+  PointsSelection,
+  transitionDounts,
+  transitionPoints,
+  viz,
+} from "./viz";
 import { DataShape } from "./data";
 interface VizWrapperProps {
   width: number;
@@ -11,9 +16,17 @@ interface VizWrapperProps {
   init?: boolean;
   curve: any;
 }
-export const VizWrapper = ({ width, height, data = [], init = true, updateDuration, curve }: VizWrapperProps) => {
+export const VizWrapper = ({
+  width,
+  height,
+  data = [],
+  init = true,
+  updateDuration,
+  curve,
+}: VizWrapperProps) => {
   const ref = useRef<SVGSVGElement>(null);
   const refDountsSelection = useRef<DountsSelection | null>(null);
+  const refPointsSelection = useRef<PointsSelection | null>(null);
   const radius = Math.min(width, height) / 2;
   const innerRadius = radius / 8;
   const outerRadius = radius;
@@ -26,16 +39,19 @@ export const VizWrapper = ({ width, height, data = [], init = true, updateDurati
 
   const getDountScale = useCallback(
     (i: number) => {
-      return scaleLinear()
-        .range([rScale(i), rScale(i + 1)])
-        .domain(extent(data[i], (d) => d.value) as Iterable<number>);
+      return (
+        scaleLinear()
+          .range([rScale(i), rScale(i + 1)])
+          // .domain(extent(data[i], (d) => d.value) as Iterable<number>);
+          .domain([0, 1])
+      );
     },
     [rScale]
   );
 
   useEffect(() => {
-    if (!refDountsSelection.current) {
-      refDountsSelection.current = viz(
+    if (!refDountsSelection.current && !refPointsSelection.current) {
+      [refDountsSelection.current, refPointsSelection.current] = viz(
         ref,
         width,
         height,
@@ -45,11 +61,27 @@ export const VizWrapper = ({ width, height, data = [], init = true, updateDurati
         getDountScale,
         12
       );
+      console.log(refPointsSelection.current);
     }
   }, [width, height, data]);
   useEffect(() => {
     if (refDountsSelection.current && !init) {
-      transitionDounts(refDountsSelection.current, data, getDountScale, updateDuration, curve);
+      transitionDounts(
+        refDountsSelection.current,
+        data,
+        getDountScale,
+        updateDuration,
+        curve
+      );
+    }
+    if (refPointsSelection.current && !init) {
+      transitionPoints(
+        refPointsSelection.current,
+        data,
+        updateDuration,
+        innerRadius,
+        outerRadius
+      );
     }
   }, [data, init, updateDuration]);
   return <svg width={width} height={height} ref={ref} />;

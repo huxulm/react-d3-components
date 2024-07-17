@@ -8,10 +8,17 @@ import { transition } from "d3-transition";
 import { easeLinear as easeFn } from "d3-ease";
 
 import { DataShape } from "./data";
+import { BaseType } from "d3";
 
 type SVGSelection = Selection<SVGGElement, any, null, undefined>;
 export type DountsSelection = Selection<
   SVGPathElement,
+  DataShape[],
+  SVGGElement,
+  null
+>;
+export type PointsSelection = Selection<
+  BaseType | SVGGElement,
   DataShape[],
   SVGGElement,
   null
@@ -26,7 +33,7 @@ export const viz = (
   data: DataShape[][],
   getDountScale: (i: number) => ScaleLinear<number, number, never>,
   xTickCount: number
-): DountsSelection => {
+): [DountsSelection, PointsSelection] => {
   //   const width = container.current!.clientWidth;
   //   const height = container.current!.clientHeight;
   //   const innerRadius = height / 12;
@@ -52,7 +59,9 @@ export const viz = (
     .domain([0, Math.PI * 2])
     .range([0, 360]);
 
-  const y = scaleLinear().range([innerRadius, outerRadius]).domain([0, 20]);
+  const y = scaleLinear()
+    .range([innerRadius, outerRadius])
+    .domain([0, data.length]);
 
   // render x Axis
   xAxes(g, innerRadius, outerRadius, x, xTickCount);
@@ -64,6 +73,7 @@ export const viz = (
 
   // render dounts
   let dountsG: DountsSelection;
+  let pointsG: PointsSelection;
   g.append("g")
     .data([null])
     .join("g")
@@ -88,30 +98,49 @@ export const viz = (
             .delay((_, i) => (i * 1000) / Math.max(1, data.length))
             .attr("stroke-opacity", 1)
         );
+    })
+    .call((g) => {
+      pointsG = g
+        .selectAll("g")
+        .data(data)
+        .join("g")
+        .call((g) =>
+          g
+            .selectAll<SVGCircleElement, DataShape[]>("circle")
+            .data((d) => d)
+            .enter()
+            .append("circle")
+            .attr("fill", (v) => color((v.dount + 1) / data.length))
+            .attr("opacity", 0)
+            .attr("stroke-width", 1)
+            .attr("stroke", "#82203E")
+            .attr(
+              "cx",
+              (v, j) =>
+                pointRadial(
+                  (j * Math.PI * 2) / data[v.dount].length,
+                  y(v.dount + v.value)
+                )[0]
+            )
+            .attr(
+              "cy",
+              (v, j) =>
+                pointRadial(
+                  (j * Math.PI * 2) / data[v.dount].length,
+                  y(v.dount + v.value)
+                )[1]
+            )
+            .attr("r", 3)
+            .call((selection) =>
+              selection
+                .transition(slow)
+                .delay((d) => (d.dount * 1000) / Math.max(1, data.length))
+                .attr("opacity", 1)
+            )
+        );
     });
-  return dountsG!;
+  return [dountsG!, pointsG!];
 };
-
-export function transitionDounts(
-  g: DountsSelection,
-  data: DataShape[][],
-  getDountScale: (i: number) => ScaleLinear<number, number, never>,
-  duration: number,
-  curve: any
-) {
-  const fast = transition().duration(duration).ease(easeFn);
-  const line = lineRadial<DataShape>().curve(curve);
-  g.data(data).call((selection) => {
-    selection
-      .transition(fast)
-      .attr("stroke-opacity", 1)
-      .attr("d", (d, i) => {
-        return line
-          .angle((_, j) => (j * Math.PI * 2) / d.length)
-          .radius((v) => getDountScale(i)(v.value))(d);
-      });
-  });
-}
 
 export const xAxes = (
   g: SVGSelection,
@@ -133,10 +162,9 @@ export const xAxes = (
         .call((g) =>
           g
             .append("path")
-            .attr("stroke", "#222")
+            .attr("class", "x-axis")
             .attr("stroke-width", 1.5)
-            .attr("stroke-opacity", 0.2)
-            .attr("stroke-dasharray", "4 4")        
+            .attr("stroke-dasharray", "4 4")
             .attr(
               "d",
               (d) =>
@@ -161,11 +189,11 @@ export const xAxes = (
           g
             .append("text")
             .append("textPath")
+            .attr("class", "x-axis")
             .attr("startOffset", 0)
-            .attr("stroke", "#00ffff")
             .attr("stoke-width", 1)
             .attr("xlink:href", (_, i) => `#p-${i}`)
-            .text((d) => `${Math.ceil(x(d))}°`)
+            .text((d, i) => (i % 3 === 0 ? `${Math.ceil(x(d))}°` : ""))
         )
         .call((g) =>
           g
@@ -185,8 +213,8 @@ export const xAxes = (
           g
             .append("text")
             .append("textPath")
+            .attr("class", "x-axis")
             .attr("startOffset", 6)
-            .attr("stroke", "#00ffff")
             .attr("font-size", 16)
             .attr("stoke-width", 1)
             .attr("xlink:href", (_, i) => `#po-${i}`)
@@ -208,10 +236,64 @@ const yAxes = (g: SVGSelection, y: XYScale, tickCount: number) => {
         .call((g) =>
           g
             .append("circle")
-            .attr("stroke", "#222")
+            .attr("class", "y-axis")
             .attr("stroke-dasharray", "4")
-            .attr("stroke-opacity", 0.2)
             .attr("r", y)
         )
     );
 };
+
+export function transitionDounts(
+  g: DountsSelection,
+  data: DataShape[][],
+  getDountScale: (i: number) => ScaleLinear<number, number, never>,
+  duration: number,
+  curve: any
+) {
+  const fast = transition().duration(duration).ease(easeFn);
+  const line = lineRadial<DataShape>().curve(curve);
+  g.data(data).call((selection) => {
+    selection
+      .transition(fast)
+      .attr("stroke-opacity", 1)
+      .attr("d", (d, i) => {
+        return line
+          .angle((_, j) => (j * Math.PI * 2) / d.length)
+          .radius((v) => getDountScale(i)(v.value))(d);
+      });
+  });
+}
+export function transitionPoints(
+  g: PointsSelection,
+  data: DataShape[][],
+  duration: number,
+  innerRadius: number,
+  outerRadius: number
+) {
+  const fast = transition().duration(duration).ease(easeFn);
+  const y = scaleLinear()
+    .range([innerRadius, outerRadius])
+    .domain([0, data.length]);
+  g.data(data).call((selection) => {
+    selection
+      .selectAll("circle")
+      .data((d) => d)
+      .transition(fast)
+      .attr(
+        "cx",
+        (v, j) =>
+          pointRadial(
+            (j * Math.PI * 2) / data[v.dount].length,
+            y(v.dount + v.value)
+          )[0]
+      )
+      .attr(
+        "cy",
+        (v, j) =>
+          pointRadial(
+            (j * Math.PI * 2) / data[v.dount].length,
+            y(v.dount + v.value)
+          )[1]
+      );
+  });
+}

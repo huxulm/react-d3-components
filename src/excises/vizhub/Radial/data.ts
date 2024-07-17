@@ -1,5 +1,6 @@
 export interface DataShape {
   id: number;
+  dount: number;
   value: number;
 }
 
@@ -12,7 +13,7 @@ export const dataFn = (
   return Array.from<any, Array<DataShape>>({ length: dounts }, (_, i) => {
     return Array.from<any, DataShape>({ length: counts[i] }, () => {
       id++;
-      return { id, value: !valueFn ? Math.random() : valueFn() };
+      return { id, dount: i, value: !valueFn ? Math.random() : valueFn() };
     });
   });
 };
@@ -33,7 +34,7 @@ export const Mock = (
           const newV = valueFn
             ? { ...v, value: valueFn(v.value) }
             : { ...v, value: Math.random() };
-            console.log(newV.value, v.value)
+            // console.log(newV.value, v.value)
             return newV
         }),
       ];

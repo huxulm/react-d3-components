@@ -1,7 +1,6 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { VizWrapper } from "./VizWrapper";
 import { Responsive } from "@/common/utils/responsive/Responsive";
-import { dataFn, DataShape, Mock } from "./data";
 import {
   curveBasis,
   curveBasisClosed,
@@ -13,6 +12,8 @@ import {
   curveStep,
   curveStepAfter,
 } from "d3-shape";
+import { randomIrwinHall } from "d3-random"
+import { dataFn, DataShape, Mock } from "./data";
 
 import "./index.css";
 
@@ -65,6 +66,8 @@ const mockRanges = [["[0, 360]", [0, Math.PI * 2]]].concat(
   })
 );
 
+const defaultValueFn = randomIrwinHall(1)
+
 export const Radial: FC<RadialProps> = ({
   initDounts,
   initOffsetDount,
@@ -82,16 +85,16 @@ export const Radial: FC<RadialProps> = ({
     mockConfig: initMockConfig || {
       id: 0,
       range: mockRanges[0][1] as [number, number],
+      valueFn: defaultValueFn
     },
     data: dataFn(
       dounts,
       Array.from({ length: dounts }, (_, i) => 5 * i + 3),
-      () => 0
+      () => 0.5
     ),
   });
 
   const update = useCallback(() => {
-    console.log("updating...");
     setStatus((prev) => ({
       ...prev,
       init: false,
@@ -105,11 +108,11 @@ export const Radial: FC<RadialProps> = ({
       start: false,
       duration: DefaultDataFetchDuration,
       curve: curveCardinalClosed,
-      mockConfig: { id: 0, range: [0, Math.PI * 2] },
+      mockConfig: { id: 0, range: [0, Math.PI * 2], valueFn: defaultValueFn },
       data: dataFn(
         dounts,
         Array.from({ length: dounts }, (_, i) => 5 * i + 3),
-        () => 0
+        () => 0.5
       ),
     });
   };

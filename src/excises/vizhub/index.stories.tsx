@@ -117,11 +117,14 @@ export const ExampleDountsWithoutMotion: StoryObj = {
   render: () => <DountNoFramerMotion />,
 };
 
-export const ExampleRadial: StoryObj = {
+export const ExampleRadial: StoryObj<typeof Radial> = {
   name: "Radial (d3)",
-  render: () => (
+  args: {
+    initDounts: 29
+  },
+  render: (args) => (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <Radial />
+      <Radial {...args}/>
     </div>
   ),
 };
