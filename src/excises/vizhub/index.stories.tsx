@@ -133,18 +133,42 @@ export const ExampleGridsRadial: StoryObj = {
       <div style={{ width: "100vw", height: "100vh" }}>
         <div style={{ height: "50vh", width: "100vw", display: "flex" }}>
           <div style={{ height: "100%", width: "50vw" }}>
-            <Radial initDounts={5}/>
+            <Radial
+              initStart
+              initDounts={5}
+              initDuration={1000}
+              initMockConfig={{
+                id: 0,
+                range: [0, Math.PI / 4],
+              }}
+            />
           </div>
           <div style={{ height: "100%", width: "50vw" }}>
-            <Radial initDounts={10}/>
+            <Radial
+              initStart
+              initDounts={10}
+              initDuration={500}
+              initMockConfig={{
+                id: 0,
+                range: [Math.PI / 4, Math.PI],
+              }}
+            />
           </div>
         </div>
         <div style={{ height: "50vh", width: "100vw", display: "flex" }}>
           <div style={{ height: "100%", width: "50vw" }}>
-            <Radial initDounts={20}/>
+            <Radial
+              initStart
+              initDounts={20}
+              initDuration={100}
+              initMockConfig={{
+                id: 0,
+                range: [Math.PI / 4, Math.PI / 4 + 0.2],
+              }}
+            />
           </div>
           <div style={{ height: "100%", width: "50vw" }}>
-            <Radial initDounts={30}/>
+            <Radial initDounts={30} initStart />
           </div>
         </div>
       </div>
