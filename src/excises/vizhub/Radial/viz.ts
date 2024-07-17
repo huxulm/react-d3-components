@@ -133,8 +133,10 @@ export const xAxes = (
         .call((g) =>
           g
             .append("path")
-            .attr("stroke", "#000")
+            .attr("stroke", "#222")
+            .attr("stroke-width", 1.5)
             .attr("stroke-opacity", 0.2)
+            .attr("stroke-dasharray", "4 4")        
             .attr(
               "d",
               (d) =>
@@ -160,7 +162,7 @@ export const xAxes = (
             .append("text")
             .append("textPath")
             .attr("startOffset", 0)
-            .attr("stroke", "steelblue")
+            .attr("stroke", "#00ffff")
             .attr("stoke-width", 1)
             .attr("xlink:href", (_, i) => `#p-${i}`)
             .text((d) => `${Math.ceil(x(d))}°`)
@@ -184,7 +186,8 @@ export const xAxes = (
             .append("text")
             .append("textPath")
             .attr("startOffset", 6)
-            .attr("stroke", "steelblue")
+            .attr("stroke", "#00ffff")
+            .attr("font-size", 16)
             .attr("stoke-width", 1)
             .attr("xlink:href", (_, i) => `#po-${i}`)
             .text((d) => `${Math.ceil(x(d))}°`)
@@ -195,7 +198,6 @@ export const xAxes = (
 const yAxes = (g: SVGSelection, y: XYScale, tickCount: number) => {
   g.append("g")
     .attr("text-anchor", "middle")
-    .attr("font-family", "sans-serif")
     .attr("font-size", 10)
     .call((g) =>
       g
@@ -206,7 +208,7 @@ const yAxes = (g: SVGSelection, y: XYScale, tickCount: number) => {
         .call((g) =>
           g
             .append("circle")
-            .attr("stroke", "#000")
+            .attr("stroke", "#222")
             .attr("stroke-dasharray", "4")
             .attr("stroke-opacity", 0.2)
             .attr("r", y)

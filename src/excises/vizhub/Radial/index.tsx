@@ -14,6 +14,8 @@ import {
   curveStepAfter,
 } from "d3-shape";
 
+import "./index.css";
+
 const easeFns = [
   curveBasis,
   curveBasisClosed,
@@ -109,12 +111,15 @@ export const Radial: FC<RadialProps> = ({
     <div ref={ref} style={{ width: "100%", height: "100%" }}>
       <div
         style={{
-          position: "absolute",
+          position: "relative",
           top: 50,
           left: 50,
           display: "flex",
-          flexDirection: "column",
+          width: "25%",
+          maxWidth: 200,
+          height: 0,
           gap: 10,
+          flexDirection: "column",
         }}
       >
         <button onClick={update}>start randomize</button>
