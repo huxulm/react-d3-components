@@ -120,7 +120,8 @@ export const ExampleDountsWithoutMotion: StoryObj = {
 export const ExampleRadial: StoryObj<typeof Radial> = {
   name: "Radial (d3)",
   args: {
-    initDounts: 29
+    initDounts: 29,
+    initDuration: 1000,
   },
   render: (args) => (
     <div style={{ width: "100vw", height: "100vh" }}>

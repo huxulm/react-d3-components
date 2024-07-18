@@ -266,6 +266,12 @@ export const Radial: FC<RadialProps> = ({
             <label>{Math.ceil(status.mockConfig.range[1] * 180 / Math.PI)}°</label>
           </label>
         </div>
+        <div>
+          <p>复杂度估算</p>
+          <pre>
+            {`O(30动态线圈+2200动态点+12X坐标线+31Y坐标线)`}
+          </pre>
+        </div>
       </div>
       <Responsive>
         {({ width, height }) =>
