@@ -112,8 +112,7 @@ export const viz = (
             .append("circle")
             .attr("fill", (v) => color((v.dount + 1) / data.length))
             .attr("opacity", 0)
-            .attr("stroke-width", 1)
-            .attr("stroke", "#82203E")
+            .attr("stroke", "none")
             .attr(
               "cx",
               (v, j) =>
